@@ -10,7 +10,6 @@ class StoreController extends Controller
 
     public function listStores(Request $request)
     {
-        return response("aaaaa", 420);
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
 
