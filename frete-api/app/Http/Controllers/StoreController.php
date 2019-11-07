@@ -93,7 +93,7 @@ class StoreController extends Controller
             CURLOPT_URL => $domain . $endpoint . $query,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $request->getBody(),
+            CURLOPT_POSTFIELDS => $request->all(),
             CURLOPT_POST => 1,
         ]);
         $output = trim(curl_exec($curl));
