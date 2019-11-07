@@ -59,6 +59,7 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->post('stores/register', 'StoreController@registerStore'); // Cadastro de loja | BODY - FORMDATA |
     $router->post('user/register', 'UserController@registerUser'); // Cadastro de usuário | BODY - FORMDATA |
     $router->post('user/add-credit', 'UserController@addCredit'); // Adição de crédito | BODY - FORMDATA |
+    $router->post('store/{$id}/phones', 'StoreController@savePhone'); // Salvar telefone da loja
 });
 
 
