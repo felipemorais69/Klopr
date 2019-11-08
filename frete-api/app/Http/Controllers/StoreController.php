@@ -69,13 +69,13 @@ class StoreController extends Controller
     }
 
     public function savePhone(Request $request, $id='') {
-        if (!is_int($id)) {
+        if (!ctype_digit($id)) {
             return response('ID da loja não informado', 400);
         }
         $token = $request->bearerToken();
         $curl = curl_init();
         $domain = 'https://sandbox.melhorenvio.com.br';
-        $endpoint = '/api/v2/me/companies/' +$id+ '/phones';
+        $endpoint = '/api/v2/me/companies/' . $id . '/phones';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
