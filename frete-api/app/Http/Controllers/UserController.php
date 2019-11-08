@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 
-class StoreController extends Controller
+class UserController extends Controller
 {
 
-    public function listStores(Request $request)
-    {
+    public function ___(Request $request)
+    {   /*
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
 
@@ -20,24 +20,28 @@ class StoreController extends Controller
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: ' . $token);
+        //$query = $request->query();
 
         curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint,
+            CURLOPT_URL => $domain . $endpoint; // . $query,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => $header,
+            //CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+            //CURLOPT_FOLLOWLOCATION => false,
+            //CURLOPT_TIMEOUT => 5,
         ]);
 
         $output = trim(curl_exec($cHandle));
         $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
         curl_close($cHandle);
 
-        return response($output, $resultCode);
+        return response($output, $resultCode);*/
     }
 
-    public function detailStore(Request $request, $id)
-    {
+    public function ____(Request $request, $id='')
+    {   /*
         if (!is_int($id)) {
-            return response('ID da loja informado incorretamente', 400);
+            return response('ID da loja não informado', 400);
         }
 
         $requestUrl = $request->fullUrl();
@@ -56,15 +60,15 @@ class StoreController extends Controller
             CURLOPT_URL => $domain . $endpoint . $query,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => $header,
+            //CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+            //CURLOPT_FOLLOWLOCATION => false,
+            //CURLOPT_TIMEOUT => 5,
         ]);
-
-        $output = trim(curl_exec($cHandle));
-        curl_close($cHandle);
 
         $output = trim(curl_exec($cHandle));
         $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
         curl_close($cHandle);
 
-        return response($output, $resultCode);
+        return response($output, $resultCode);*/
     }
 }

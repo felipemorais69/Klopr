@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 
-class StoreController extends Controller
+class ShipmentController extends Controller
 {
 
-    public function listStores(Request $request)
+    public function listAgencies(Request $request)
     {
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
 
         $cHandle = curl_init();
         $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
-        $endpoint = '/api/v2/me/companies';
+        $endpoint = '/api/v2/me/shipment/agencies';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
@@ -23,8 +23,8 @@ class StoreController extends Controller
 
         curl_setopt_array($cHandle,[
             CURLOPT_URL => $domain . $endpoint,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $header,
+            CURLOPT_RETURNTRANSFER => true
+            //CURLOPT_HTTPHEADER => $header,
         ]);
 
         $output = trim(curl_exec($cHandle));
@@ -34,32 +34,34 @@ class StoreController extends Controller
         return response($output, $resultCode);
     }
 
-    public function detailStore(Request $request, $id)
+    public function cancelShipment(Request $request)
     {
-        if (!is_int($id)) {
-            return response('ID da loja informado incorretamente', 400);
-        }
-
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
 
-        $cHandle = curl_init();
+        $cHandle     = curl_init();
         $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
         $endpoint = '/api/v2/me/companies/';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: ' . $token);
-        $query = '?id_loja=' . $id;
+
+        $fields = array(
+            'order[id]' => $request->request->get('order-id'),
+            'order[reason_id]' => $request->request->get('reason-id'),
+            'order[description]' => $request->request->get('description')
+            );
+
+        $payload = json_encode($fields);
 
         curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint . $query,
+            CURLOPT_URL => $domain . $endpoint,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => $header,
+            CURLOPT_POST, true,
+            CURLOPT_POSTFIELDS, $payload
         ]);
-
-        $output = trim(curl_exec($cHandle));
-        curl_close($cHandle);
 
         $output = trim(curl_exec($cHandle));
         $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
@@ -68,3 +70,4 @@ class StoreController extends Controller
         return response($output, $resultCode);
     }
 }
+
