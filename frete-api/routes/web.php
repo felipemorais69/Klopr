@@ -42,3 +42,18 @@ $app->post('/oauth/token/', function (Request $request) {
         'scope' => 'cart-read+cart-write+companies-read+companies-write+coupons-read+coupons-write+notifications-read+orders-read+products-read+products-write+purchases-read+shipping-calculate+shipping-cancel+shipping-checkout+shipping-companies+shipping-generate+shipping-preview+shipping-print+shipping-share+shipping-tracking+ecommerce-shipping+transactions-read+users-read+users-write+webhooks-read+webhooks-write'
     ]);
 });
+
+
+
+////// GETs -- ASRF //////
+$router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
+    $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
+    $router->get('stores', 'StoreController@listStores'); // Listagem de lojas
+    $router->get('store/{id}', 'StoreController@detailStore'); // Informações da loja(id)
+    $router->get('shipment/agencies', 'ShippmentController@listAgencies'); // Listar agências
+    $router->get('shipment/buy-shipping', 'ShippmentController@buyShipping'); // Finalizar a compra dos envios
+
+    $router->del('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
+
+    $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possível)
+});
