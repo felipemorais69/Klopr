@@ -49,5 +49,11 @@ $app->post('/oauth/token/', function (Request $request) {
 $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
     $router->get('stores', 'StoreController@listStores'); // Listagem de lojas
-    $router->get('store/{$id}', 'StoreController@detailStore'); // Informações da loja(id)
+    $router->get('store/{id}', 'StoreController@detailStore'); // Informações da loja(id)
+    $router->get('shipment/agencies', 'ShippmentController@listAgencies'); // Listar agências
+    $router->get('shipment/buy-shipping', 'ShippmentController@buyShipping'); // Finalizar a compra dos envios
+
+    $router->del('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
+
+    $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possível)
 });
