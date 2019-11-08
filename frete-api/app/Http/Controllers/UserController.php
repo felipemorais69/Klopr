@@ -8,68 +8,45 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
 
-    public function ___(Request $request)
-    {   /*
+    public function registerUser(Request $request)
+    {
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-
-        $cHandle = curl_init();
         $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
         $endpoint = '/api/v2/me/companies';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: ' . $token);
-        //$query = $request->query();
 
-        curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint; // . $query,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $header,
-            //CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            //CURLOPT_FOLLOWLOCATION => false,
-            //CURLOPT_TIMEOUT => 5,
-        ]);
+        $fields = array(
+            'firstname' => $request->request->get('firstname'), //Obrigatório
+            'lastname' => $request->request->get('lastname'), //Obrigatório
+            'document' => $request->request->get('document'), //Obrigatório
+            'birthdate' => $request->request->get('birthdate'), //Obrigatório
+            'email' => $request->request->get('email'), //Obrigatório
+            'password' => $request->request->get('password'), //Obrigatório
+            'phone_mobile' => $request->request->get('mobile-phone'), //Obrigatório
+            'phone_fixed' => $request->request->get('fixed-phone'), //Opcional
+            'company' => $request->request->get('company'), //Opcional
+            'coupon' => $request->request->get('coupon'), //Opcional
+            'terms' => $request->request->get('terms'), //Obrigatório
+            'address[label]' => $request->request->get('address-label'), //Opcional
+            'address[postal_code]' => $request->request->get('postal-code'), //Obrigatório
+            'address[address]' => $request->request->get('address'), //Obrigatório
+            'address[number]' => $request->request->get('address-number'), //Obrigatório
+            'address[complement]' => $request->request->get('address-complement'), //Opcional
+            'address[district]' => $request->request->get('district'),  //Opcional
+            'address[city]' => $request->request->get('city'), //Obrigatório
+            'address[state_abbr]' => $request->request->get('state-abbr'), //Obrigatório
+            'address[country]' => $request->request->get('country'), //Opcional
+        );
 
-        $output = trim(curl_exec($cHandle));
-        $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
-        curl_close($cHandle);
+        $response = $this->PostRequestCurl($domain, $endpoint, $header, $fields, 'JSON');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
 
-        return response($output, $resultCode);*/
-    }
-
-    public function ____(Request $request, $id='')
-    {   /*
-        if (!is_int($id)) {
-            return response('ID da loja não informado', 400);
-        }
-
-        $requestUrl = $request->fullUrl();
-        $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-
-        $cHandle = curl_init();
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
-        $endpoint = '/api/v2/me/companies/';
-        $header = array(
-            'Accept: application/json',
-            'Content-type: application/json',
-            'Authorization: ' . $token);
-        $query = '?id_loja=' . $id;
-
-        curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint . $query,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $header,
-            //CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            //CURLOPT_FOLLOWLOCATION => false,
-            //CURLOPT_TIMEOUT => 5,
-        ]);
-
-        $output = trim(curl_exec($cHandle));
-        $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
-        curl_close($cHandle);
-
-        return response($output, $resultCode);*/
+        return response($output, $resultCode);
     }
 
     public function listPedidos(Request $request)
