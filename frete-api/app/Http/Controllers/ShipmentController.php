@@ -38,8 +38,6 @@ class ShipmentController extends Controller
     {
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-
-        $cHandle     = curl_init();
         $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
         $endpoint = '/api/v2/me/companies/';
         $header = array(
@@ -53,19 +51,9 @@ class ShipmentController extends Controller
             'order[description]' => $request->request->get('description')
             );
 
-        $payload = json_encode($fields);
-
-        curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POST, true,
-            CURLOPT_POSTFIELDS, $payload
-        ]);
-
-        $output = trim(curl_exec($cHandle));
-        $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
-        curl_close($cHandle);
+        $response = $this->PostRequestCurl($domain, $endpoint, $header, $fields, 'JSON');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
 
         return response($output, $resultCode);
     }
