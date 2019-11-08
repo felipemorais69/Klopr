@@ -47,6 +47,7 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
 
     $router->del('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
 
+    $router->post('user/register', 'UserController@registerUser '); // Cadastro de usuário
     $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possível)
     $router->post('store/{$id}/phones', 'StoreController@savePhone'); // Salvar telefone da loja
 });
