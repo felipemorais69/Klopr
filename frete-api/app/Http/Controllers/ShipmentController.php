@@ -57,5 +57,96 @@ class ShipmentController extends Controller
 
         return response($output, $resultCode);
     }
+
+    public function trackShipment(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $domain = 'https://sandbox.melhorenvio.com.br';
+        $endpoint = '/api/v2/me/shipment/tracking';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: ' . $token
+        );
+        $fields = array(
+            'orders[]' => $request->request->get('orders[]')
+        );
+        $response = $this->PostRequestCurl($domain, $endpoint, $header, $fields, 'JSON');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+        return response($output, $resultCode);
+    }
+
+    public function getAgency(Request $request, $id='') {
+        if (!ctype_digit($id)) {
+            return response('ID da loja não informado', 400);
+        }
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $domain = 'https://sandbox.melhorenvio.com.br';
+        $endpoint = '/api/v2/me/shipment/agencies/' . $id;
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: ' . $token
+        );
+        $response = $this->GetDelRequestCurl($domain, $endpoint,'' , $header, 'JSON');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+        return response($output, $resultCode);
+    }
+
+    public function listarFiltros(Request $request) {
+        $params =  $request->query;
+        $country = "BR";
+        $token = $request->bearerToken();
+        $curl = curl_init();
+        $domain = 'https://sandbox.melhorenvio.com.br';
+        $endpoint = '/api/v2/me/shipment/agencies';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/x-www-form-urlencoded',
+            'Authorization: ' . $token
+        );
+        $query = '?country=' . $country;
+        if ($params->has("company")) {
+            $query = $query . "&company=" . $params->get("company");
+        }
+        if ($params->has("state")) {
+            $query = $query . "&state=" . $params->get("uf");
+        }
+        if ($params->has("city")) {
+            $query = $query . "&city=" . $params->get("cidade");
+        }
+
+        curl_setopt_array($curl,[
+            CURLOPT_URL => $domain . $endpoint . $query,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => $header,
+        ]);
+
+        $output = trim(curl_exec($curl));
+        curl_close($curl);
+        return response($output, 200);
+    }
+
+    public function getService(Request $request, $id='') {
+        if (!ctype_digit($id)) {
+            return response('ID do serviço não informado', 400);
+        }
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $domain = 'https://sandbox.melhorenvio.com.br';
+        $endpoint = '/api/v2/me/shipment/services/' . $id;
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: ' . $token
+        );
+        $response = $this->GetDelRequestCurl($domain, $endpoint,'' , $header, 'JSON');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+        return response($output, $resultCode);
+    }
 }
 

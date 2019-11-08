@@ -42,10 +42,15 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
     $router->get('stores', 'StoreController@listStores'); // Listagem de lojas
     $router->get('store/{id}', 'StoreController@detailStore'); // Informações da loja(id)
-    $router->get('shipment/agencies', 'ShippmentController@listAgencies'); // Listar agências
-    $router->get('shipment/buy-shipping', 'ShippmentController@buyShipping'); // Finalizar a compra dos envios
 
-    $router->del('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
+    $router->get('shipment/agencies', 'ShipmentController@listAgencies'); // Listar agências
+    $router->get('shipment/agencies/{id}', 'ShipmentController@getAgency'); // Consultar agencia
+    $router->get('shipment/services/{id}', 'ShipmentController@getService'); // Consultar servico
+    $router->get('shipment/agenciesFilter', 'ShipmentController@listarFiltros'); // Consultar agencia
+    $router->get('shipment/buy-shipping', 'ShipmentController@buyShipping'); // Finalizar a compra dos envios
+    $router->post('shipment/tracking', 'ShipmentController@trackShipment'); // Finalizar a compra dos envios
+
+    $router->delete('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
 
     $router->post('user/register', 'UserController@registerUser '); // Cadastro de usuário
     $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possível)
