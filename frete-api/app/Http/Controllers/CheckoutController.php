@@ -10,13 +10,15 @@ class CheckoutController extends Controller
 
     public function removeShipping (Request $request, $id)
     {
-        if (!is_int($id)) {
-            return response('ID do item informado incorretamente', 400);
-        }
+        /*
+        HEADERS
+        Accept: application/json
+        Content-Type: application/json
+        Authorization : Bearer {{token}}
+        */
 
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
         $endpoint = '/api/v2/me/cart/{id}';
         $header = array(
             'Accept: application/json',
@@ -24,7 +26,7 @@ class CheckoutController extends Controller
             'Authorization: ' . $token);
         $query = '?id=' . $id;
 
-        $response = $this->GetDelRequestCurl($domain, $endpoint, $query, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -33,15 +35,21 @@ class CheckoutController extends Controller
 
     public function buyShipping(Request $request)
     {
+
+        /*
+        HEADERS
+        Accept: application/json
+        Authorization : Bearer {{token}}
+        */
+
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
         $endpoint = '/api/v2/me/shipment/checkout';
         $header = array(
             'Accept: application/json',
-            'Authorization: ' . $token);
+            'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl($domain, $endpoint, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

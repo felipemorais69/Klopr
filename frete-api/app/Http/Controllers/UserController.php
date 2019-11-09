@@ -11,13 +11,12 @@ class UserController extends Controller
     public function registerUser(Request $request)
     {
         $requestUrl = $request->fullUrl();
-        $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
-        $endpoint = '/api/v2/me/companies';
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/register';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
-            'Authorization: ' . $token);
+            'Authorization: Bearer ' . $token);
 
         $fields = array(
             'firstname' => $request->request->get('firstname'), //Obrigatório
@@ -42,7 +41,7 @@ class UserController extends Controller
             'address[country]' => $request->request->get('country'), //Opcional
         );
 
-        $response = $this->PostRequestCurl($domain, $endpoint, $header, $fields, 'JSON');
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'JSON');
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

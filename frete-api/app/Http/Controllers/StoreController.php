@@ -11,17 +11,15 @@ class StoreController extends Controller
     public function listStores(Request $request)
     {
         $requestUrl = $request->fullUrl();
-        $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
+        $token = $request->bearerToken();
         $endpoint = '/api/v2/me/companies';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
-            'Authorization: ' . $token);
+            'Authorization: Bearer ' . $token);
         $query='';
 
-        $response = $this->GetDelRequestCurl($domain, $endpoint, $query, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -30,22 +28,16 @@ class StoreController extends Controller
 
     public function detailStore(Request $request, $id)
     {
-        if (!is_int($id)) {
-            return response('ID da loja informado incorretamente', 400);
-        }
-
         $requestUrl = $request->fullUrl();
-        $token = $request->bearerToken(); // Formato: 'Bearer {token}'
-
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
+        $token = $request->bearerToken();
         $endpoint = '/api/v2/me/companies/';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
-            'Authorization: ' . $token);
-        $query = '?id_loja=' . $id;
+            'Authorization: Bearer ' . $token);
+        $query = $id;
 
-        $response = $this->GetDelRequestCurl($domain, $endpoint, $query, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

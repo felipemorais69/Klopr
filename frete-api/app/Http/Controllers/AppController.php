@@ -10,16 +10,24 @@ class AppController extends Controller
 
     public function showAppSettings(Request $request)
     {
-        $requestUrl = $request->fullUrl();
-        $token = $request->bearerToken(); // Formato: 'Bearer {token}'
 
-        $domain = 'https://sandbox.melhorenvio.com.br'; // ALTERAR!!!
+        /*
+        HEADERS
+        Accept: application/json
+        Authorization : Bearer {{token}}
+        */
+
+
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+
         $endpoint = '/api/v2/me/shipment/app-settings';
         $header = array(
             'Accept: application/json',
-            'Authorization: ' . $token);
+            'Authorization: Bearer ' . $token);
+        $query='';
 
-        $response = $this->GetDelRequestCurl($domain, $endpoint, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
