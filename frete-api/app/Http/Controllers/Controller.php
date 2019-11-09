@@ -6,6 +6,10 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
+    const domainME = 'https://www.melhorenvio.com.br';
+    const domainSandboxME = 'https://sandbox.melhorenvio.com.br';
+
+
     protected function PostRequestCurl($domain, $endpoint, $header, $fields, $method='JSON')
     {
         $cHandle = curl_init();
@@ -39,7 +43,6 @@ class Controller extends BaseController
     }
 
 
-
     protected function GetDelRequestCurl($domain, $endpoint, $query, $header='')
     {
         $cHandle = curl_init();
@@ -58,6 +61,7 @@ class Controller extends BaseController
             'resultCode' => $resultCode,
             'output' => $output
         );
+
         return $response;
     }
 
