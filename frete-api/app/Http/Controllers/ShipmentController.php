@@ -10,7 +10,6 @@ class ShipmentController extends Controller
 
     public function listAgencies(Request $request)
     {
-
         /*
         OUTPUT
         [
@@ -73,7 +72,6 @@ class ShipmentController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-
         $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
@@ -84,6 +82,13 @@ class ShipmentController extends Controller
 
     public function cancelShipment(Request $request)
     {
+        /*
+         INPUT
+        --form "order_id=af3fef55-b068-4a43-8d9e-cfcda148a38c" \
+        --form "order_reason_id=2" \
+        --form "order_description=Descrição do cancelamento"
+         */
+
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
         $endpoint = '/api/v2/me/shipment/cancel';
@@ -93,12 +98,41 @@ class ShipmentController extends Controller
             'Authorization: Bearer ' . $token);
 
         $fields = array(
-            'order[id]' => $request->request->get('order-id'),
-            'order[reason_id]' => $request->request->get('reason-id'),
-            'order[description]' => $request->request->get('description')
+            'order[id]' => $request->input('order_id'),
+            'order[reason_id]' => $request->input('order_reason_id'),
+            'order[description]' => $request->input('order_description')
             );
 
         $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'URL');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+
+    public function printTag(Request $request)
+    {
+        /*
+         * INPUT (RAW)
+         * {
+              "mode": "public"
+              "orders": {
+                    2   "{{order_id}}",
+              }
+            }
+         */
+
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/shipment/print';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+        $body = $request->getContent();
+
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $body, null);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
