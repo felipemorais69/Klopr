@@ -11,6 +11,11 @@ class CartController extends Controller
 
     public function delItem(Request $request)
     {
+        if (!$request->isMethod('delete'))
+        {
+            return response('Wrong method', 400);
+        }
+
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
         $endpoint = '/api/v2/me/cart/{id}';
