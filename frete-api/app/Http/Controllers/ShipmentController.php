@@ -201,7 +201,7 @@ class ShipmentController extends Controller
             'Authorization: ' . $token
         );
         $fields = array(
-            'orders[]' => $request->request->get('orders[]')
+            'orders' => $request->request->get('orders')
         );
         $response = $this->PostRequestCurl($domain, $endpoint, $header, $fields, 'JSON');
         $output = $response['output'];
@@ -279,6 +279,54 @@ class ShipmentController extends Controller
         $output = $response['output'];
         $resultCode = $response['resultCode'];
         return response($output, $resultCode);
+    }
+
+    public function preview(Request $request) {
+        $token = $request->bearerToken();
+        $domain = 'https://melhorenvio.com.br';
+        $endpoint = '/api/v2/me/shipment/preview';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/x-www-form-urlencoded',
+            'Authorization: ' . $token
+        );
+        $fields = array(
+            'orders' => $request->request->get('orders')
+        );
+        $curl = curl_init();
+        curl_setopt_array($curl,[
+            CURLOPT_URL => $domain . $endpoint,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => $header,
+            CURLOPT_POSTFIELDS => http_build_query($fields),
+            CURLOPT_POST => true,
+        ]);
+        $output = trim(curl_exec($curl));
+        curl_close($curl);
+        return response($output, 200);
+    }
+
+    public function cancellable(Request $request, $id='') {
+        $curl = curl_init();
+        $token = $request->bearerToken();
+        $domain = 'https://melhorenvio.com.br';
+        $endpoint = '/api/v2/me/shipment/cancellable';
+        $order_id = $request->request->get('orders');
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $domain . $endpoint,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS =>"{\n  \"orders\": {\n    \"" . $id . "\"\n  }\n}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Authorization: " . $token
+            ),
+        ));
+        $response = trim(curl_exec($curl));
+        $err = curl_error($curl);
+        curl_close($curl);
+        return response($response, 200);
     }
 }
 

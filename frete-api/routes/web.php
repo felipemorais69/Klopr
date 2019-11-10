@@ -50,6 +50,13 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('stores', 'StoreController@listStores'); // Listagem de lojas
     $router->get('stores/{id}', 'StoreController@detailStore'); // Informações da loja(id)
 
+    $router->get('shipment/agencies/{id}', 'ShipmentController@getAgency'); // Consultar agencia
+    $router->get('shipment/services/{id}', 'ShipmentController@getService'); // Consultar servico
+    $router->get('shipment/agenciesFilter', 'ShipmentController@listarFiltros'); // Consultar agencia
+    $router->get('shipment/buy-shipping', 'ShipmentController@buyShipping'); // Finalizar a compra dos envios
+    $router->post('shipment/tracking', 'ShipmentController@trackShipment'); // Finalizar a compra dos envios
+    $router->post('shipment/preview', 'ShipmentController@preview'); // Pré visualização de etiquetas
+    $router->get('shipment/cancellable/{id}', 'ShipmentController@cancellable');
     $router->delete('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
 
     $router->post('cart/add', 'CartController@insertShipping'); // Adicionar fretes no carrinho | BODY - RAW |
