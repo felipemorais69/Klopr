@@ -10,17 +10,19 @@ class Controller extends BaseController
     const domainSandboxME = 'https://sandbox.melhorenvio.com.br';
 
 
-    protected function PostRequestCurl($domain, $endpoint, $header, $fields, $method='JSON')
+    protected function PostRequestCurl($domain, $endpoint, $header, $fields, $data='JSON')
     {
         $cHandle = curl_init();
 
-        if ($method == 'JSON') {
+        if ($data == 'JSON') {
             $payload = json_encode($fields);
-        } else { // URL form
+        } elseif ($data == 'URL') { // URL form
             $urlString = '';
             foreach($fields as $key => $value) {
                 $urlString .= $key.'='.$value.'&'; }
             $payload = rtrim($urlString, '&');
+        } else {
+            $payload = $fields;
         }
 
         curl_setopt_array($cHandle,[
