@@ -52,10 +52,15 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('stores/{id}', 'StoreController@detailStore'); // Informações da loja(id)
     $router->get('shipment/agencies', 'ShipmentController@listAgencies'); // Listar agências
     $router->get('shipment/buy-shipping', 'ShipmentController@buyShipping'); // Finalizar a compra dos envios
+    $router->get('cart', 'CartController@listItems'); // Listar itens do carrinho ** TEST
+    $router->get('cart/{id}', 'CartController@detailItems'); // Detalhar item do carrinho ** TEST
 
     $router->delete('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
 
-    $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possivel)
-    $router->post('user/register', 'UserController@registerUser'); // Cadastro de usuário
+    $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possível)
+    $router->post('user/register', 'UserController@registerUser'); // Cadastro de usuário * TEST
+    $router->post('user/add-credit', 'UserController@addCredit'); // Adição de crédito ** TEST
+    $router->post('stores/register', 'UserController@registerStore'); // Cadastro de loja ** TEST
+
 });
 
