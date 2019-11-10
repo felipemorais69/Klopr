@@ -10,6 +10,29 @@ class UserController extends Controller
 
     public function registerUser(Request $request)
     {
+        /* INPUT
+         * --form "firstname=João" \
+           --form "lastname=Silva" \
+           --form "document=99988877732" \
+           --form "birthdate=1945-01-05" \
+           --form "email=email@domain.com" \
+           --form "password=password" \
+           --form "phone_mobile=5398783214" \
+           --form "phone_fixed=5333333333" \
+           --form "company=Nome da loja" \
+           --form "coupon=MELHORLOJA" \
+           --form "terms=1" \
+           --form "address_label=Meu Endereco" \
+           --form "address_postal_code=96020000" \
+           --form "address_address=Rua General Osório" \
+           --form "address_number=596" \
+           --form "address_complement=" \
+           --form "address_district=Centro" \
+           --form "address_city=Pelotas" \
+           --form "address_state_abbr=RS" \
+           --form "address_country=BR"
+         */
+
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
         $endpoint = '/api/v2/register';
@@ -18,29 +41,29 @@ class UserController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
         $fields = array(
-            'firstname' => $request->request->get('firstname'), //Obrigatório -- Primeiro nome
-            'lastname' => $request->request->get('lastname'), //Obrigatório -- Sobrenome
-            'document' => $request->request->get('document'), //Obrigatório -- CPF
-            'birthdate' => $request->request->get('birthdate'), //Obrigatório -- Data de nascimento
-            'email' => $request->request->get('email'), //Obrigatório -- email
-            'password' => $request->request->get('password'), //Obrigatório -- senha
-            'phone_mobile' => $request->request->get('phone_mobile'), //Obrigatório -- Celular
-            'phone_fixed' => $request->request->get('phone_fixed'), //Opcional -- Telefone fixo
-            'company' => $request->request->get('company'), //Opcional -- Nome da loja
-            'coupon' => $request->request->get('coupon'), //Opcional -- CUPOM
-            'terms' => $request->request->get('terms'), //Obrigatório -- Aceitação de termos do uso
-            'address[label]' => $request->request->get('address[label]'), //Opcional -- Identificação do endereço
-            'address[postal_code]' => $request->request->get('address[postal_code]'), //Obrigatório -- CEP
-            'address[address]' => $request->request->get('address[address]'), //Obrigatório -- Rua/Logradouro
-            'address[number]' => $request->request->get('address[number]'), //Obrigatório -- Número do imóvel
-            'address[complement]' => $request->request->get('address[complement]'), //Opcional -- Complemento do endereço
-            'address[district]' => $request->request->get('address[district]'),  //Opcional -- Bairro
-            'address[city]' => $request->request->get('address[city]'), //Obrigatório -- Cidade
-            'address[state_abbr]' => $request->request->get('address[state_abbr]'), //Obrigatório -- Sigla do Estado
-            'address[country]' => $request->request->get('address[country]'), //Opcional -- País
+            'firstname' => $request->input('firstname'), //Obrigatório -- Primeiro nome
+            'lastname' => $request->input('lastname'), //Obrigatório -- Sobrenome
+            'document' => $request->input('document'), //Obrigatório -- CPF
+            'birthdate' => $request->input('birthdate'), //Obrigatório -- Data de nascimento
+            'email' => $request->input('email'), //Obrigatório -- email
+            'password' => $request->input('password'), //Obrigatório -- senha
+            'phone_mobile' => $request->input('phone_mobile'), //Obrigatório -- Celular
+            'phone_fixed' => $request->input('phone_fixed'), //Opcional -- Telefone fixo
+            'company' => $request->input('company'), //Opcional -- Nome da loja
+            'coupon' => $request->input('coupon'), //Opcional -- CUPOM
+            'terms' => $request->input('terms'), //Obrigatório -- Aceitação de termos do uso
+            'address[label]' => $request->input('address_label'), //Opcional -- Identificação do endereço
+            'address[postal_code]' => $request->input('address_postal_code'), //Obrigatório -- CEP
+            'address[address]' => $request->input('address_address'), //Obrigatório -- Rua/Logradouro
+            'address[number]' => $request->input('address_number'), //Obrigatório -- Número do imóvel
+            'address[complement]' => $request->input('address_complement'), //Opcional -- Complemento do endereço
+            'address[district]' => $request->input('address_district'),  //Opcional -- Bairro
+            'address[city]' => $request->input('address_city'), //Obrigatório -- Cidade
+            'address[state_abbr]' => $request->input('address_state_abbr'), //Obrigatório -- Sigla do Estado
+            'address[country]' => $request->input('address_country'), //Opcional -- País
         );
 
-        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'JSON');
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'URL');
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -50,6 +73,12 @@ class UserController extends Controller
 
     public function addCredit(Request $request)
     {
+        /*
+         * --form "gateway=mercado-pago" \
+           --form "redirect=url" \
+           --form "value=10.50"
+         */
+
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
         $endpoint = '/api/v2/me/balance';
@@ -58,9 +87,9 @@ class UserController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
         $fields = array(
-            'gateway' => $request->request->get('gateway'), //Obrigatório -- moip / mercado-pago
-            'redirect' => $request->request->get('redirect'), //Opcional -- URL de redirecionamento
-            'value' => $request->request->get('value'), //Obrigatório -- Valor monetário
+            'gateway' => $request->input('gateway'), //Obrigatório -- moip / mercado-pago
+            'redirect' => $request->input('redirect'), //Opcional -- URL de redirecionamento
+            'value' => $request->input('value'), //Obrigatório -- Valor monetário
         );
 
         $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'JSON');
