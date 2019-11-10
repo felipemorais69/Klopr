@@ -10,14 +10,6 @@ class AppController extends Controller
 
     public function showAppSettings(Request $request)
     {
-
-        /*
-        HEADERS
-        Accept: application/json
-        Authorization : Bearer {{token}}
-        */
-
-
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
 
@@ -25,9 +17,8 @@ class AppController extends Controller
         $header = array(
             'Accept: application/json',
             'Authorization: Bearer ' . $token);
-        $query='';
 
-        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $query, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

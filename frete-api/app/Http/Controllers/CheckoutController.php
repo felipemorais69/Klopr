@@ -10,13 +10,6 @@ class CheckoutController extends Controller
 
     public function removeShipping (Request $request, $id)
     {
-        /*
-        HEADERS
-        Accept: application/json
-        Content-Type: application/json
-        Authorization : Bearer {{token}}
-        */
-
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken(); // Formato: 'Bearer {token}'
         $endpoint = '/api/v2/me/cart/{id}';
@@ -33,13 +26,11 @@ class CheckoutController extends Controller
         return response($output, $resultCode);
     }
 
+
     public function buyShipping(Request $request)
     {
-
         /*
-        HEADERS
-        Accept: application/json
-        Authorization : Bearer {{token}}
+
         */
 
         $requestUrl = $request->fullUrl();
@@ -49,7 +40,7 @@ class CheckoutController extends Controller
             'Accept: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $header);
+        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

@@ -12,11 +12,6 @@ class ShipmentController extends Controller
     {
 
         /*
-        HEADERS
-        Accept: application/json
-        Content-Type: application/json
-        Authorization : Bearer {{token}}
-
         OUTPUT
         [
            {
@@ -77,9 +72,9 @@ class ShipmentController extends Controller
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
-        $query='';
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
+
+        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
