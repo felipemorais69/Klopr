@@ -138,5 +138,56 @@ class ShipmentController extends Controller
 
         return response($output, $resultCode);
     }
+
+
+    public function buyShippinggGET(Request $request)
+    {
+        /*
+
+        */
+
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/shipment/checkout';
+        $header = array(
+            'Accept: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+
+    public function buyShippingPOST(Request $request)
+    {
+        /*INPUT
+         * --form "orders=af3fef55-b068-4a43-8d9e-cfcda148a38c" \
+           --form "gateway=moip" \
+           --form "redirect=https://www.klopr.com" \
+           --form "wallet=19.30"
+        */
+
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/shipment/checkout';
+        $header = array(
+            'Accept: application/json',
+            'Authorization: Bearer ' . $token);
+        $fields = array(
+            'orders[]' => $request->input('orders'), //Obrigatório -- Nome de identificação no sistema
+            'gateway' => $request->input('gateway'), //Opcional -- moip / mercado pago (caso nao tenha saldo suficiente na carteira)
+            'redirect' => $request->input('redirect'), //Opcional -- URL para redirecionamento apos pagamento
+            'wallet' => $request->input('wallet'), //Opcional -- Saldo que será utilizado da carteira
+        );
+
+        $response = $this->PostRequestCurl(self::domainME, $endpoint, $header, $fields,'URL');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
 }
 
