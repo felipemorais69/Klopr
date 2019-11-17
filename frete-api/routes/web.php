@@ -12,38 +12,30 @@
 */
 use Illuminate\Http\Response;
 
-//GET - Autenticação
-$router->get('/oauth/authorize?client_id={{client_id}}&redirect_uri={{callback}}&response_type=code&scope=cart-read', function () use ($router) {
-    return response()->json();
-});
+//  GET - Autenticação
+$router->get('oauth/authorize?client_id={{client_id}}&redirect_uri={{callback}}&response_type=code&scope=cart-read','AutenticationController@autentication');
 
-//POST - Solicitação de Token
+//  Token Solicitation
+$router->post('oauth/token','AutenticationController@tokenSolicitation');
 
-$app->post('/oauth/token/', function (Request $request) {
-    ->header("application/json");
-    $this->validate($request, [
-        'grant_type' => 'authorization_code',
-        'client_id' => '{{client_id}}',
-        'client_secret' => '{{client_secret}}',
-        'redirect_uri' => '{{callback}}',
-        'code' => '{{code}}'
-    ]);
-});
+//  Refresh Token
+$router->post('oauth/token','AutenticationController@refreshToken');
+//  POST - Geração de Etiquetas
 
-//POST - Refresh Token
+$router->post('shipment/generate', 'EtiquetaController@generationEtiquetas'); //Gera as Etiquetas
 
-$app->post('/oauth/token/', function (Request $request) {
-    ->header("application/json");
-    $this->validate($request, [
-        'grant_type' => 'refresh_token',
-        'refresh_token' => '{{refresh_token}}',
-        'client_id' => '{{client_id}}',
-        'client_secret' => '{{client_secret}}',
-        'scope' => 'cart-read+cart-write+companies-read+companies-write+coupons-read+coupons-write+notifications-read+orders-read+products-read+products-write+purchases-read+shipping-calculate+shipping-cancel+shipping-checkout+shipping-companies+shipping-generate+shipping-preview+shipping-print+shipping-share+shipping-tracking+ecommerce-shipping+transactions-read+users-read+users-write+webhooks-read+webhooks-write'
-    ]);
-});
+//  GET - Search de Etiquetas
 
+$router->get('orders/search?q=%7Bid%7Ctracking%7Cauthorization_code%7Cself_tracking%7D&status=%7Bpending%7Creleased%7Cposted%7Cdelivered%7Ccanceled%7Cundelivered%7D', 'EtiquetaController@searchEtiquetas');
 
+//  GET - List Pedidos
+
+$router->get('orders', 'UserController@listPedidos');
+
+//  GET - List Transportadoras, List Transportadoras Information, List Services.
+$router->get('shipment/companies','TransportController@listTransport');
+$router->get('shipment/companies/{{id_transportadora}}','TransportController@listInfoTransport');
+$router->get('shipment/services','TransportController@listServices');
 
 ////// GETs -- ASRF //////
 $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
