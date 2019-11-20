@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 //  GET - Autenticação
 $router->get('oauth/authorize?client_id={{client_id}}&redirect_uri={{callback}}&response_type=code&scope=cart-read','AutenticationController@autentication');
 
+
 //  Token Solicitation
 $router->post('oauth/token','AutenticationController@tokenSolicitation');
 
@@ -28,6 +29,7 @@ $router->post('shipment/generate', 'EtiquetaController@generationEtiquetas'); //
 
 $router->get('orders/search?q=%7Bid%7Ctracking%7Cauthorization_code%7Cself_tracking%7D&status=%7Bpending%7Creleased%7Cposted%7Cdelivered%7Ccanceled%7Cundelivered%7D', 'EtiquetaController@searchEtiquetas');
 
+
 //  GET - List Pedidos
 
 $router->get('orders', 'UserController@listPedidos');
@@ -37,18 +39,29 @@ $router->get('shipment/companies','TransportController@listTransport');
 $router->get('shipment/companies/{{id_transportadora}}','TransportController@listInfoTransport');
 $router->get('shipment/services','TransportController@listServices');
 
-////// GETs -- ASRF //////
+    
+////// ASRF //////
 $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
+    $router->get('cart', 'CartController@listItems'); // Listar itens do carrinho
+    $router->get('cart/{id}', 'CartController@detailItems'); // Detalhar item do carrinho
+    $router->get('shipment/agencies', 'ShipmentController@listAgencies'); // Listar agências
+    $router->get('shipment/checkout', 'ShipmentController@buyShippingGET'); // Finalizar a compra dos envios
     $router->get('stores', 'StoreController@listStores'); // Listagem de lojas
-    $router->get('store/{id}', 'StoreController@detailStore'); // Informações da loja(id)
-    $router->get('shipment/agencies', 'ShippmentController@listAgencies'); // Listar agências
-    $router->get('shipment/buy-shipping', 'ShippmentController@buyShipping'); // Finalizar a compra dos envios
+    $router->get('stores/{id}', 'StoreController@detailStore'); // Informações da loja(id)
 
-    $router->del('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
+    $router->delete('cart/{id}', 'CartController@delItem'); // Remover item do carrinho(id)
 
-    $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa (se possível)
+    $router->post('cart/add', 'CartController@insertShipping'); // Adicionar fretes no carrinho | BODY - RAW |
+    $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa | BODY - FORMDATA | (se possível)
+    $router->post('shipment/print', 'ShipmentController@printTag'); // Imprimir etiqueta de envio | BODY - RAW |
+    $router->post('shipment/checkout', 'ShipmentController@buyShippingPOST'); // Compra de fretes (Checkout) (Ordens) | BODY - FORMDATA |
+    $router->post('stores/register', 'StoreController@registerStore'); // Cadastro de loja | BODY - FORMDATA |
+    $router->post('user/register', 'UserController@registerUser'); // Cadastro de usuário | BODY - FORMDATA |
+    $router->post('user/add-credit', 'UserController@addCredit'); // Adição de crédito | BODY - FORMDATA |
 });
+
+
 
 //CALCULO DO FRETE DE UM PACOTE
 
@@ -198,4 +211,3 @@ $app->postEndereco('/api/v2/me/companies/762566a8-ec38-4d51-8feb-941ed0367efb/ad
 
     ]);
 });
-
