@@ -9,7 +9,8 @@
         "laravel/lumen-framework": "^6.0",
         "ext-curl": "*",
         "ext-http": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+      "ext-fileinfo": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
