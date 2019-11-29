@@ -56,11 +56,12 @@ class StoreController extends Controller
 
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
-        $endpoint = '/api/v2/me/balance';
+        $endpoint = '/api/v2/me/companies';
         $header = array(
             'Accept: application/json',
-            'Content-type: application/json',
+            'Content-type: application/x-www-form-urlencoded',
             'Authorization: Bearer ' . $token);
+
         $fields = array(
             'name' => $request->input('name'), //Obrigatório -- Nome de identificação no sistema
             'email' => $request->input('email'), //Obrigatório -- email da loja
