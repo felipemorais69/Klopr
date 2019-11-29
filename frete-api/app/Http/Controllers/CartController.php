@@ -144,9 +144,10 @@ class CartController extends Controller
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
-        $body = $request->getContent();
 
-        $response = $this->PostRequestCurl(self::domainME, $endpoint, $header, $body, null);
+        $body = $request->all();
+
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $body, 'JSON');
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

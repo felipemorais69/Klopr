@@ -94,14 +94,14 @@ class ShipmentController extends Controller
         $endpoint = '/api/v2/me/shipment/cancel';
         $header = array(
             'Accept: application/json',
-            'Content-type: application/json',
+            'Content-type: application/x-www-form-urlencoded',
             'Authorization: Bearer ' . $token);
 
         $fields = array(
             'order[id]' => $request->input('order_id'),
             'order[reason_id]' => $request->input('order_reason_id'),
             'order[description]' => $request->input('order_description')
-            );
+        );
 
         $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'URL');
         $output = $response['output'];
@@ -130,9 +130,9 @@ class ShipmentController extends Controller
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
-        $body = $request->getContent();
+        $body = $request->all();
 
-        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $body, null);
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $body, 'JSON');
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -140,7 +140,7 @@ class ShipmentController extends Controller
     }
 
 
-    public function buyShippinggGET(Request $request)
+    public function buyAllShipping(Request $request)
     {
         /*
 
