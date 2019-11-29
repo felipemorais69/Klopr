@@ -38,6 +38,8 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
 
 
 
+
+
     $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
     $router->get('cart', 'CartController@listItems'); // Listar itens do carrinho
     $router->get('cart/{id}', 'CartController@detailItem'); // Detalhar item do carrinho
@@ -59,23 +61,15 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
 
 
 
+
     $router->get('user', 'UserController@userInfo');
     $router->get('user/balance', 'UserController@userBalance');
     $router->get('user/addresses', 'UserController@userAddresses');
 
+    $router->post('shipment/calculate/product', 'ShipmentController@calculateProductShipment');
+    $router->post('shipment/calculate/package', 'ShipmentController@calculatePackageShipment');
     $router->post('stores/add-address/{id}', 'StoreController@registerAddress');
     $router->post('stores/add-picture/{id}', 'StoreController@addPicture');
 
+
 });
-
-
-/*
-//CALCULO DO FRETE DE UM PACOTE
-$app->postPacote('api/v2/me/shipment/calculate', function (Request $request) {});
-
-//POST PRODUTO
-$app->postProdutos('api/v2/me/shipment/calculate', function (Request $request) {});
-
-// POST IMAGEM DA LOJA
-$app->postImagemLoja('/api/v2/me/companies/{id_loja}/picture', function (Request $request) {});
-*/
