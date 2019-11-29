@@ -82,7 +82,6 @@ class StoreController extends Controller
 
     public function registerAddress(Request $request, $id)
     {
-
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
         $endpoint = '/api/v2/me/companies/' . $id . '/addresses';
@@ -100,5 +99,24 @@ class StoreController extends Controller
         return response($output, $resultCode);
     }
 
+
+    public function addPicture(Request $request, $id)
+    {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/companies/' . $id . '/picture';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: multipart/form-data',
+            'Authorization: Bearer ' . $token);
+
+        $file = $request->file('file')->getRealPath();
+
+        $response = $this->PostFileCurl(self::domainSandboxME, $endpoint, $header, $file);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
 
 }
