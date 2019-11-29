@@ -51,7 +51,7 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->post('cart/add', 'CartController@insertShipping'); // Adicionar fretes no carrinho | BODY - RAW |
     $router->post('shipment/cancel', 'ShipmentController@cancelShipment'); // Cancela remessa | BODY - FORMDATA | (se possível)
     $router->post('shipment/print', 'ShipmentController@printTag'); // Imprimir etiqueta de envio | BODY - RAW |
-    $router->post('shipment/checkout', 'ShipmentController@buyShippingPOST'); // Compra de fretes (Checkout) (Ordens) | BODY - FORMDATA |
+    $router->post('shipment/checkout', 'ShipmentController@buyShipping'); // Compra de fretes (Checkout) (Ordens) | BODY - FORMDATA |
     $router->post('stores/register', 'StoreController@registerStore'); // Cadastro de loja | BODY - FORMDATA |
     $router->post('user/register', 'UserController@registerUser'); // Cadastro de usuário | BODY - FORMDATA |
     $router->post('user/add-credit', 'UserController@addCredit'); // Adição de crédito | BODY - FORMDATA |

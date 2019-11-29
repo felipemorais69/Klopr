@@ -161,7 +161,7 @@ class ShipmentController extends Controller
     }
 
 
-    public function buyShippingPOST(Request $request)
+    public function buyShipping(Request $request)
     {
         /*INPUT
          * --form "orders=af3fef55-b068-4a43-8d9e-cfcda148a38c" \
