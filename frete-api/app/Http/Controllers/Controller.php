@@ -17,10 +17,7 @@ class Controller extends BaseController
         if ($data == 'JSON') {
             $payload = json_encode($fields);
         } elseif ($data == 'URL') { // URL form
-            $urlString = '';
-            foreach($fields as $key => $value) {
-                $urlString .= $key.'='.$value.'&'; }
-            $payload = rtrim($urlString, '&');
+            $payload = http_build_query($fields);
         } else {
             $payload = $fields;
         }
@@ -43,11 +40,31 @@ class Controller extends BaseController
     }
 
 
-    protected function GetDelRequestCurl($domain, $endpoint, $query, $header='')
+    protected function GetRequestCurl($domain, $endpoint, $query, $header='')
     {
         $cHandle = curl_init();
 
         curl_setopt($cHandle, CURLOPT_URL, $domain . $endpoint . $query);
+        curl_setopt($cHandle, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($cHandle, CURLOPT_RETURNTRANSFER, true);
+
+        $output = trim(curl_exec($cHandle));
+        $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
+        curl_close($cHandle);
+
+        return array(
+            'resultCode' => $resultCode,
+            'output' => $output
+        );
+    }
+
+
+    protected function DelRequestCurl($domain, $endpoint, $query, $header='')
+    {
+        $cHandle = curl_init();
+
+        curl_setopt($cHandle, CURLOPT_URL, $domain . $endpoint . $query);
+        curl_setopt($cHandle, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($cHandle, CURLOPT_HTTPHEADER, $header);
         curl_setopt($cHandle, CURLOPT_RETURNTRANSFER, true);
 
