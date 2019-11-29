@@ -25,23 +25,21 @@ class Controller extends BaseController
             $payload = $fields;
         }
 
-        curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POST, true,
-            CURLOPT_POSTFIELDS, $payload
-        ]);
+        curl_setopt($cHandle, CURLOPT_URL, $domain . $endpoint);
+        curl_setopt($cHandle, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($cHandle, CURLOPT_POST, true);
+        curl_setopt($cHandle, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($cHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($cHandle, CURLOPT_HEADER, false);
 
         $output = trim(curl_exec($cHandle));
         $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
         curl_close($cHandle);
 
-        $response = array(
+        return array(
             'resultCode' => $resultCode,
             'output' => $output
         );
-        return $response;
     }
 
 
@@ -49,22 +47,18 @@ class Controller extends BaseController
     {
         $cHandle = curl_init();
 
-        curl_setopt_array($cHandle,[
-            CURLOPT_URL => $domain . $endpoint . $query,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $header
-        ]);
+        curl_setopt($cHandle, CURLOPT_URL, $domain . $endpoint . $query);
+        curl_setopt($cHandle, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($cHandle, CURLOPT_RETURNTRANSFER, true);
 
         $output = trim(curl_exec($cHandle));
         $resultCode = curl_getinfo($cHandle, CURLINFO_HTTP_CODE);
         curl_close($cHandle);
 
-        $response = array(
+        return array(
             'resultCode' => $resultCode,
             'output' => $output
         );
-
-        return $response;
     }
 
 }

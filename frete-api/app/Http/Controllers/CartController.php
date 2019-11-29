@@ -24,7 +24,7 @@ class CartController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, null, $header);
+        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -42,7 +42,7 @@ class CartController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, null, $header);
+        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

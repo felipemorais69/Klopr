@@ -183,11 +183,60 @@ class ShipmentController extends Controller
             'wallet' => $request->input('wallet'), //Opcional -- Saldo que será utilizado da carteira
         );
 
-        $response = $this->PostRequestCurl(self::domainME, $endpoint, $header, $fields,'URL');
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields,'URL');
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
         return response($output, $resultCode);
+    }
+
+
+    public function calculateShipment(Request $request) { //CALCULO DO FRETE DE UM PACOTE
+
+        $enfpoint = 'api/v2/me/shipment/calculate';
+        $url = ''; // ENDPOINT ONDE ESTARÁ O JSON DA KLOPR (Seguindo o padrão https://docs.melhorenvio.com.br/shipment/calculate.html)
+        $json = file_get_contents($url);
+        $json_decoded = json_decode($json);
+
+        $fromPostalCode = $json_decoded->from[0];
+        $fromAddress = $json_decoded->from[1];
+        $fromNumber = $json_decoded->from[2];
+
+        $toPostalCode = $json_decoded->to[0];
+        $toAddress = $json_decoded->to[1];
+        $toNumber = $json_decoded->to[2];
+
+        $packageWeight = $json_decoded->package[0];
+        $packageWidth = $json_decoded->package[1];
+        $packageHeight = $json_decoded->package[2];
+        $packageLenght = $json_decoded->package[3];
+
+        $insuranceValue = $json_decoded->options[0];
+        $receipt = $json_decoded->options[1];
+        $ownHand = $json_decoded->options[2];
+        $collect = $json_decoded->options[3];
+
+        $services = $json_decoded->services;
+
+
+        $this->validate($request, [
+            'from[postal_code]' => $fromPostalCode,
+            'from[address]' => $fromAddress,
+            'from[number]' => $fromNumber,
+            'to[postal_code]' => $toPostalCode,
+            'to[address]' => $toAddress,
+            'to[number]' => $toNumber,
+            'package[weight]' => $packageWeight,
+            'package[width]' => $packageWidth,
+            'package[height]' => $packageHeight,
+            'package[length]' => $packageLenght,
+            'options[insurance_value]' => $insuranceValue,
+            'options[receipt]' => $receipt,
+            'options[collect]' => $collect,
+            'options[own_hand]' => $ownHand,
+            'services' => $services
+
+        ]);
     }
 }
 
