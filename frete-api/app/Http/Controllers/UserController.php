@@ -131,4 +131,54 @@ class UserController extends Controller
         echo $response;
         }
     }
+
+
+    public function userInfo(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+
+    public function userBalance(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/balance?pretty';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+    public function userAddresses(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/addresses';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
 }
