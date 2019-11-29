@@ -64,6 +64,7 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('user/addresses', 'UserController@userAddresses');
 
     $router->post('stores/add-address/{id}', 'StoreController@registerAddress');
+    $router->post('stores/add-picture/{id}', 'StoreController@addPicture');
 
 });
 
@@ -77,7 +78,4 @@ $app->postProdutos('api/v2/me/shipment/calculate', function (Request $request) {
 
 // POST IMAGEM DA LOJA
 $app->postImagemLoja('/api/v2/me/companies/{id_loja}/picture', function (Request $request) {});
-
-//POST ENDEREÇO DA LOJA
-$app->postEndereco('/api/v2/me/companies/762566a8-ec38-4d51-8feb-941ed0367efb/addresses', function (Request $request) {});
 */
