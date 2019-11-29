@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
 
-    public function delItem(Request $request)
+    public function delItem(Request $request, $id)
     {
         if (!$request->isMethod('delete'))
         {
@@ -18,13 +18,13 @@ class CartController extends Controller
 
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
-        $endpoint = '/api/v2/me/cart/{id}';
+        $endpoint = '/api/v2/me/cart/';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $response = $this->DelRequestCurl(self::domainSandboxME, $endpoint, $id, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -54,14 +54,14 @@ class CartController extends Controller
     {
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
-        $endpoint = '/api/v2/me/cart';
+        $endpoint = '/api/v2/me/cart/';
         $header = array(
             'Accept: application/json',
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
-        $query = '/' . $id;
+        $query = $id;
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
