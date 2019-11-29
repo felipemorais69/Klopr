@@ -18,12 +18,13 @@ class StoreController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, null, $header);
+        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
         return response($output, $resultCode);
     }
+
 
     public function detailStore(Request $request, $id)
     {
@@ -36,12 +37,13 @@ class StoreController extends Controller
             'Authorization: Bearer ' . $token);
         $query = $id;
 
-        $response = $this->GetDelRequestCurl(self::domainME, $endpoint, $query, $header);
+        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
         return response($output, $resultCode);
     }
+
 
     public function registerStore(Request $request)
     {
