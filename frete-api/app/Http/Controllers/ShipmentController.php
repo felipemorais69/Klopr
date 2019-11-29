@@ -170,7 +170,6 @@ class ShipmentController extends Controller
            --form "wallet=19.30"
         */
 
-        $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
         $endpoint = '/api/v2/me/shipment/checkout';
         $header = array(
@@ -192,52 +191,57 @@ class ShipmentController extends Controller
     }
 
 
-    public function calculateShipment(Request $request) { //CALCULO DO FRETE DE UM PACOTE
+    public function calculateProductShipment(Request $request) //CALCULO DO FRETE DE UM PRODUTO
+    {
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/shipment/calculate';
+        $header = array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token);
 
-        $enfpoint = 'api/v2/me/shipment/calculate';
-        $url = ''; // ENDPOINT ONDE ESTARÁ O JSON DA KLOPR (Seguindo o padrão https://docs.melhorenvio.com.br/shipment/calculate.html)
-        $json = file_get_contents($url);
-        $json_decoded = json_decode($json);
+        $fields = $request->all();
 
-        $fromPostalCode = $json_decoded->from[0];
-        $fromAddress = $json_decoded->from[1];
-        $fromNumber = $json_decoded->from[2];
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields,'JSON');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
 
-        $toPostalCode = $json_decoded->to[0];
-        $toAddress = $json_decoded->to[1];
-        $toNumber = $json_decoded->to[2];
-
-        $packageWeight = $json_decoded->package[0];
-        $packageWidth = $json_decoded->package[1];
-        $packageHeight = $json_decoded->package[2];
-        $packageLenght = $json_decoded->package[3];
-
-        $insuranceValue = $json_decoded->options[0];
-        $receipt = $json_decoded->options[1];
-        $ownHand = $json_decoded->options[2];
-        $collect = $json_decoded->options[3];
-
-        $services = $json_decoded->services;
+        return response($output, $resultCode);
+    }
 
 
-        $this->validate($request, [
-            'from[postal_code]' => $fromPostalCode,
-            'from[address]' => $fromAddress,
-            'from[number]' => $fromNumber,
-            'to[postal_code]' => $toPostalCode,
-            'to[address]' => $toAddress,
-            'to[number]' => $toNumber,
-            'package[weight]' => $packageWeight,
-            'package[width]' => $packageWidth,
-            'package[height]' => $packageHeight,
-            'package[length]' => $packageLenght,
-            'options[insurance_value]' => $insuranceValue,
-            'options[receipt]' => $receipt,
-            'options[collect]' => $collect,
-            'options[own_hand]' => $ownHand,
-            'services' => $services
+    public function calculatePackageShipment(Request $request) //CALCULO DO FRETE DE UM PACOTE
+    {
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/shipment/calculate';
+        $header = array(
+            'Accept: application/json',
+            'Content-Type: application/x-www-form-urlencoded',
+            'Authorization: Bearer ' . $token);
 
-        ]);
+        $fields = array(
+            'from[postal_code]' => $request->input('from_postal_code'),
+            'from[address]' => $request->input('from_address'),
+            'from[number]' => $request->input('from_number'),
+            'to[postal_code]' => $request->input('to_postal_code'),
+            'to[address]' => $request->input('to_address'),
+            'to[number]' => $request->input('to_number'),
+            'package[weight]' => $request->input('package_weight'),
+            'package[width]' => $request->input('package_width'),
+            'package[height]' => $request->input('package_height'),
+            'package[length]' => $request->input('package_length'),
+            'options[insurance_value]' => $request->input('options_insurance_value'),
+            'options[receipt]' => $request->input('options_receipt'),
+            'options[collect]' => $request->input('options_collect'),
+            'options[own_hand]' => $request->input('options_own_hand'),
+            'services' => $request->input('services')
+        );
+
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields,'URL');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
     }
 }
 
