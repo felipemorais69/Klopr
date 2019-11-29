@@ -40,9 +40,9 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
 
     $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
     $router->get('cart', 'CartController@listItems'); // Listar itens do carrinho
-    $router->get('cart/{id}', 'CartController@detailItems'); // Detalhar item do carrinho
+    $router->get('cart/{id}', 'CartController@detailItem'); // Detalhar item do carrinho
     $router->get('shipment/agencies', 'ShipmentController@listAgencies'); // Listar agências
-    $router->get('shipment/checkout', 'ShipmentController@buyShippingGET'); // Finalizar a compra dos envios
+    $router->get('shipment/checkout-all', 'ShipmentController@buyAllShipping'); // Finalizar a compra dos envios
     $router->get('stores', 'StoreController@listStores'); // Listagem de lojas
     $router->get('stores/{id}', 'StoreController@detailStore'); // Informações da loja(id)
 
