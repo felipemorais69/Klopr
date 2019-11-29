@@ -175,6 +175,7 @@ class ShipmentController extends Controller
         $endpoint = '/api/v2/me/shipment/checkout';
         $header = array(
             'Accept: application/json',
+            'Content-Type: application/x-www-form-urlencoded',
             'Authorization: Bearer ' . $token);
         $fields = array(
             'orders[]' => $request->input('orders'), //Obrigatório -- Nome de identificação no sistema
