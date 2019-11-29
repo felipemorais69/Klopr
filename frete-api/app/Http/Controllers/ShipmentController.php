@@ -72,7 +72,7 @@ class ShipmentController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -153,7 +153,7 @@ class ShipmentController extends Controller
             'Accept: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 

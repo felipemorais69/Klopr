@@ -18,7 +18,7 @@ class StoreController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -37,7 +37,7 @@ class StoreController extends Controller
             'Authorization: Bearer ' . $token);
         $query = $id;
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
