@@ -84,7 +84,7 @@ class UserController extends Controller
         $endpoint = '/api/v2/me/balance';
         $header = array(
             'Accept: application/json',
-            'Content-type: application/json',
+            'Content-type: application/x-www-form-urlencoded',
             'Authorization: Bearer ' . $token);
         $fields = array(
             'gateway' => $request->input('gateway'), //Obrigatório -- moip / mercado-pago
@@ -92,7 +92,7 @@ class UserController extends Controller
             'value' => $request->input('value'), //Obrigatório -- Valor monetário
         );
 
-        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'JSON');
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'URL');
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -130,5 +130,55 @@ class UserController extends Controller
         } else {
         echo $response;
         }
+    }
+
+
+    public function userInfo(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+
+    public function userBalance(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/balance?pretty';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+    public function userAddresses(Request $request) {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/addresses';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/json',
+            'Authorization: Bearer ' . $token);
+
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
     }
 }

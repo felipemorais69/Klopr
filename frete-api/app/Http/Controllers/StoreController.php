@@ -18,7 +18,7 @@ class StoreController extends Controller
             'Content-type: application/json',
             'Authorization: Bearer ' . $token);
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, null, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, null, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -37,7 +37,7 @@ class StoreController extends Controller
             'Authorization: Bearer ' . $token);
         $query = $id;
 
-        $response = $this->GetDelRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
+        $response = $this->GetRequestCurl(self::domainSandboxME, $endpoint, $query, $header);
         $output = $response['output'];
         $resultCode = $response['resultCode'];
 
@@ -56,11 +56,12 @@ class StoreController extends Controller
 
         $requestUrl = $request->fullUrl();
         $token = $request->bearerToken();
-        $endpoint = '/api/v2/me/balance';
+        $endpoint = '/api/v2/me/companies';
         $header = array(
             'Accept: application/json',
-            'Content-type: application/json',
+            'Content-type: application/x-www-form-urlencoded',
             'Authorization: Bearer ' . $token);
+
         $fields = array(
             'name' => $request->input('name'), //Obrigatório -- Nome de identificação no sistema
             'email' => $request->input('email'), //Obrigatório -- email da loja
@@ -77,4 +78,45 @@ class StoreController extends Controller
 
         return response($output, $resultCode);
     }
+
+
+    public function registerAddress(Request $request, $id)
+    {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/companies/' . $id . '/addresses';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: application/x-www-form-urlencoded',
+            'Authorization: Bearer ' . $token);
+
+        $fields = $request->all();
+
+        $response = $this->PostRequestCurl(self::domainSandboxME, $endpoint, $header, $fields, 'URL');
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
+
+    public function addPicture(Request $request, $id)
+    {
+        $requestUrl = $request->fullUrl();
+        $token = $request->bearerToken();
+        $endpoint = '/api/v2/me/companies/' . $id . '/picture';
+        $header = array(
+            'Accept: application/json',
+            'Content-type: multipart/form-data',
+            'Authorization: Bearer ' . $token);
+
+        $file = $request->file('file')->getRealPath();
+
+        $response = $this->PostFileCurl(self::domainSandboxME, $endpoint, $header, $file);
+        $output = $response['output'];
+        $resultCode = $response['resultCode'];
+
+        return response($output, $resultCode);
+    }
+
 }
