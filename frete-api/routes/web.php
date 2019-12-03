@@ -36,10 +36,6 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->get('shipment/companies/{{id_transportadora}}','TransportController@listInfoTransport');
     $router->get('shipment/services','TransportController@listServices');
 
-
-
-
-
     $router->get('app-settings', 'AppController@showAppSettings'); // Configurações da aplicação
     $router->get('cart', 'CartController@listItems'); // Listar itens do carrinho
     $router->get('cart/{id}', 'CartController@detailItem'); // Detalhar item do carrinho
@@ -58,9 +54,14 @@ $router->group(['prefix' => 'api/v1/frete'], function () use ($router) {
     $router->post('user/register', 'UserController@registerUser'); // Cadastro de usuário | BODY - FORMDATA |
     $router->post('user/add-credit', 'UserController@addCredit'); // Adição de crédito | BODY - FORMDATA |
 
-
-
-
+    $router->post('store/{$id}/phones', 'StoreController@savePhone'); // Salvar telefone da loja 
+    $router->get('shipment/agencies/{id}', 'ShipmentController@getAgency'); // Consultar agencia
+    $router->get('shipment/services/{id}', 'ShipmentController@getService'); // Consultar servico
+    $router->get('shipment/agenciesFilter', 'ShipmentController@listarFiltros'); // Consultar agencia
+    $router->get('shipment/buy-shipping', 'ShipmentController@buyShipping'); // Finalizar a compra dos envios
+    $router->post('shipment/tracking', 'ShipmentController@trackShipment'); // Finalizar a compra dos envios
+    $router->post('shipment/preview', 'ShipmentController@preview'); // Pré visualização de etiquetas
+    $router->get('shipment/cancellable/{id}', 'ShipmentController@cancellable'); // Checar cancelavel
 
     $router->get('user', 'UserController@userInfo');
     $router->get('user/balance', 'UserController@userBalance');
